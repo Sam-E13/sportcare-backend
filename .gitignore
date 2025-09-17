@@ -1,0 +1,22 @@
+# Django
+*.pyc
+*__pycache__/
+db.sqlite3
+media/
+
+# Environments
+.env
+.venv/
+env/
+IDET/
+
+# Docker
+docker-compose.override.yml
+
+# OS
+.DS_Store
+Thumbs.db
+
+# IDE
+.vscode/
+.idea/
