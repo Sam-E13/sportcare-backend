@@ -1,28 +1,21 @@
-FROM python:3.11-slim-bullseye  
-# Establecer variables de entorno para Python
-ENV PYTHONDONTWRITEBYTECODE 1
-ENV PYTHONUNBUFFERED 1
+FROM python:3.10-slim
 
 WORKDIR /app
 
-# Instalar dependencias del sistema necesarias
+# Instalar dependencias del sistema
 RUN apt-get update && apt-get install -y \
-    gcc \
+    build-essential \
     libpq-dev \
     && rm -rf /var/lib/apt/lists/*
 
-# Instalar dependencias de Python PRIMERO (para mejor caching)
+# Instalar dependencias de Python
 COPY requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt
-RUN pip install gunicorn  # ← ¡Importante! Servidor para producción
 
-# Copiar el proyecto DESPUÉS de instalar dependencias
+# Copiar el proyecto
 COPY . .
 
-# Colectar archivos estáticos (necesario para producción)
-RUN python manage.py collectstatic --noinput
-
-# Puerto expuesto
+# Puerto y comando
 EXPOSE 8000
 
 # Comando para PRODUCCIÓN (usando Gunicorn)
