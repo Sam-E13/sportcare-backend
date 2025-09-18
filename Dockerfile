@@ -1,4 +1,4 @@
-FROM python:3.11-slim-bookworm  
+FROM python:3.11-slim-bullseye  
 # Establecer variables de entorno para Python
 ENV PYTHONDONTWRITEBYTECODE 1
 ENV PYTHONUNBUFFERED 1
