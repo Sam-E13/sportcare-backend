@@ -15,8 +15,5 @@ RUN pip install --no-cache-dir -r requirements.txt
 # Copiar el proyecto
 COPY . .
 
-# Puerto dinámico (Render usa variable de entorno)
-# NO uses EXPOSE con $PORT, mejor manejarlo solo en el CMD
-
 # Comando que usa la variable PORT de Render
 CMD ["sh", "-c", "gunicorn --bind 0.0.0.0:$PORT --workers 3 SportCareIdet.wsgi:application"]
