@@ -15,8 +15,8 @@ RUN pip install --no-cache-dir -r requirements.txt
 # Copiar el proyecto
 COPY . .
 
-# Puerto y comando
-EXPOSE 8000
+# Puerto (Render usa el puerto de la variable de entorno)
+EXPOSE $PORT
 
 # Comando para PRODUCCIÓN (usando Gunicorn)
-CMD ["gunicorn", "--bind", "0.0.0.0:8000", "--workers", "3", "SportCareIdet.wsgi:application"]
+CMD gunicorn --bind 0.0.0.0:$PORT --workers 3 SportCareIdet.wsgi:application
