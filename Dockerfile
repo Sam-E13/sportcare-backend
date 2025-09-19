@@ -6,6 +6,7 @@ WORKDIR /app
 RUN apt-get update && apt-get install -y \
     build-essential \
     libpq-dev \
+    curl \
     && rm -rf /var/lib/apt/lists/*
 
 # Instalar dependencias de Python
@@ -15,8 +16,8 @@ RUN pip install --no-cache-dir -r requirements.txt
 # Copiar el proyecto
 COPY . .
 
-# Puerto (Render usa el puerto de la variable de entorno)
-EXPOSE $PORT
+# Puerto
+EXPOSE 8000
 
-# Comando para PRODUCCIÓN (usando Gunicorn)
-CMD gunicorn --bind 0.0.0.0:$PORT --workers 3 SportCareIdet.wsgi:application
+# Comando de diagnóstico - temporal
+CMD ["sleep", "300"]
