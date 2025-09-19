@@ -16,6 +16,6 @@ RUN pip install --no-cache-dir -r requirements.txt
 COPY . .
 
 # Comando que usa la variable PORT de Render
-CMD ["sh", "-c", "gunicorn --bind 0.0.0.0:$PORT --workers 3 SportCareIdet.wsgi:application"]
+CMD ["sh", "-c", "gunicorn --bind 0.0.0.0:$PORT --workers 3 SportCareIdet.SportCareIdet.wsgi:application"]
 
 
