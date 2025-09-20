@@ -25,4 +25,4 @@ COPY . .
 RUN echo "Verificando la estructura de archivos en /app:" && ls -lR /app
 
 # Comando para ejecutar la aplicación
-CMD ["sh", "-c", "gunicorn --bind 0.0.0.0:$PORT SportCareIdet.wsgi:application"]
+CMD ["sh", "-c", "gunicorn --bind 0.0.0.0:$PORT SportCareIdet.SportCareIdet.wsgi:application"]
