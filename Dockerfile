@@ -8,17 +8,19 @@ RUN apt-get update && apt-get install -y \
     libpq-dev \
     && rm -rf /var/lib/apt/lists/*
 
-# Copiar y instalar requirements
+# Copiar requirements primero para cachear
 COPY requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt
-RUN pip install gunicorn dj-database-url
 
-# Copiar todo el proyecto (incluyendo settings_production.py)
+# Copiar todo el proyecto
 COPY . .
 
 # Variables de entorno
 ENV PYTHONPATH=/app
 ENV DJANGO_SETTINGS_MODULE=SportCareIdet.settings_production
 
+# Puerto expuesto
+EXPOSE $PORT
+
 # Comando para Render
-CMD ["sh", "-c", "python manage.py migrate && python manage.py collectstatic --noinput && gunicorn --bind 0.0.0.0:${PORT:-8000} --workers 1 --timeout 120 SportCareIdet.wsgi:application"]
+CMD ["sh", "-c", "python manage.py migrate && python manage.py collectstatic --noinput && gunicorn --bind 0.0.0.0:${PORT:-8000} --workers 2 --timeout 120 SportCareIdet.wsgi:application"]
