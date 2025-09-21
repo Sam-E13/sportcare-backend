@@ -12,5 +12,8 @@ RUN pip install --no-cache-dir -r requirements.txt
 
 COPY . .
 
-# Comando CORREGIDO y DEFINITIVO
+# ESTABLECER PYTHONPATH EXPLÍCITAMENTE
+ENV PYTHONPATH=/app
+
+# COMANDO DEFINITIVO
 CMD ["sh", "-c", "gunicorn --bind 0.0.0.0:$PORT SportCareIdet.wsgi:application"]
