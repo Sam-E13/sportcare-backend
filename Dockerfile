@@ -12,9 +12,7 @@ RUN pip install --no-cache-dir -r requirements.txt
 
 COPY . .
 
-# ESTABLECER PYTHONPATH EXPLÍCITAMENTE
 ENV PYTHONPATH=/app
 ENV DJANGO_SETTINGS_MODULE=SportCareIdet.settings
 
-# COMANDO DEFINITIVO - Usar directamente gunicorn sin sh
-CMD ["python", "-m", "gunicorn", "--bind", "0.0.0.0:8000", "SportCareIdet.wsgi:application"]
+CMD ["sh", "-c", "gunicorn --bind 0.0.0.0:${PORT:-8000} --workers 1 --timeout 120 SportCareIdet.wsgi:application"]
