@@ -14,6 +14,7 @@ COPY . .
 
 # ESTABLECER PYTHONPATH EXPLÍCITAMENTE
 ENV PYTHONPATH=/app
+ENV DJANGO_SETTINGS_MODULE=SportCareIdet.settings
 
-# COMANDO DEFINITIVO
-CMD ["sh", "-c", "gunicorn --bind 0.0.0.0:$PORT SportCareIdet.wsgi:application"]
+# COMANDO DEFINITIVO - Usar directamente gunicorn sin sh
+CMD gunicorn --bind 0.0.0.0:${PORT:-8000} --chdir /app SportCareIdet.wsgi:application
