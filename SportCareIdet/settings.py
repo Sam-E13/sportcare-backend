@@ -10,9 +10,7 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/5.1/ref/settings/
 """
 
-import os
 from pathlib import Path
-import dj_database_url
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -22,12 +20,12 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/5.1/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = os.environ.get('SECRET_KEY', 'django-insecure-ff#tgg&$mvzd^g86w379=^eub^sc4rl8hh)@oms7lk^f=dy4(-')
+SECRET_KEY = 'django-insecure-ff#tgg&$mvzd^g86w379=^eub^sc4rl8hh)@oms7lk^f=dy4(-'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = os.environ.get('DEBUG', 'True') == 'True'
+DEBUG = True
 
-ALLOWED_HOSTS = os.environ.get('ALLOWED_HOSTS', 'localhost,127.0.0.1,backend,*').split(',')
+ALLOWED_HOSTS = ['localhost', '127.0.0.1', 'backend', '*']
 
 
 # Application definition
@@ -37,7 +35,7 @@ INSTALLED_APPS = [
     "unfold.contrib.filters",         # Filtros avanzados (opcional)
     "unfold.contrib.forms",           # Formularios estilizados (opcional)
     "unfold.contrib.inlines",         # Inlines con tabs (opcional)
-    'django.contrib.admin',
+    "django.contrib.admin",
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
@@ -96,30 +94,17 @@ WSGI_APPLICATION = 'SportCareIdet.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/5.1/ref/settings/#databases
 
-DATABASE_URL = os.environ.get('DATABASE_URL')
-
-if DATABASE_URL:
-    # MODO PRODUCCIÓN (Render.com)
-    # dj_database_url parsea automáticamente la URL de Render y configura todo, incluido SSL.
-    DATABASES = {
-        'default': dj_database_url.config(
-            default=DATABASE_URL,
-            conn_max_age=600,  # Mejora el rendimiento de las conexiones
-            ssl_require=True   # Fuerza SSL, que es necesario en Render
-        )
-    }
-else:
-    # MODO DESARROLLO LOCAL (Docker Compose)
-    DATABASES = {
+DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': os.environ.get('DB_NAME', 'SportCareIdet'),
-        'USER': os.environ.get('DB_USER', 'postgres'),
-        'PASSWORD': os.environ.get('DB_PASSWORD', 'postgres'),
-        'HOST': os.environ.get('DB_HOST', 'db'),
-        'PORT': os.environ.get('DB_PORT', '5432'),
+        'NAME': 'SportCareIdet',
+        'USER': 'postgres',
+        'PASSWORD': '23570',
+        'HOST': 'localhost',
+        'PORT': '5432',
         'OPTIONS': {
-            'connect_timeout': 5,
+            'connect_timeout': 5,  # Tiempo de espera para conexión (segundos)
+              # Para producción con SSL
         },
     }
 }
@@ -160,11 +145,11 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/5.1/howto/static-files/
 
 STATIC_URL = 'static/'
-STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')  # ← Importante para producción
 
 # Media files (User uploaded files)
+import os
 MEDIA_URL = '/media/'
-MEDIA_ROOT = os.path.join(BASE_DIR, 'media')  # ← Directorio específico para media
+MEDIA_ROOT = BASE_DIR  # Cambiar para que apunte al directorio base del proyecto
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.1/ref/settings/#default-auto-field
@@ -172,7 +157,11 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'media')  # ← Directorio específico para 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 # Configuración CORS mejorada
-CORS_ALLOWED_ORIGINS = os.environ.get('CORS_ALLOWED_ORIGINS', 'http://localhost:5173,http://127.0.0.1:5173,http://react-app:80').split(',')
+CORS_ALLOWED_ORIGINS = [
+    "http://localhost:5173",
+    "http://127.0.0.1:5173",
+    "http://react-app:80" ,
+]
 
 CORS_ALLOW_CREDENTIALS = True
 
@@ -197,7 +186,7 @@ UNFOLD = {
 
     "SIDEBAR": {
         "show_search": True,
-        "show_all_applications": False,
+        "show_all_applications": False, # Oculta la lista por defecto para usar solo nuestra navegación
         "navigation": [
             {
                 "title": "Gestión Principal",
@@ -317,24 +306,29 @@ UNFOLD = {
                         "icon": "fitness_center",
                         "link": "/admin/catalogos/atletacontacto/",
                     },
+                    # Modelos como Estudio, Ejercicio, AtletaContacto, etc.,
+                    # suelen administrarse mejor como "inlines" dentro de sus
+                    # modelos principales (Consulta, SesionEntrenamiento, Atleta)
+                    # y no necesitan un enlace directo en el menú lateral.
                 ],
             },
         ],
     },
+
 }
 
 
 # Configuración de Email con Maileroo
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
-EMAIL_HOST = os.environ.get('EMAIL_HOST', 'smtp.maileroo.com')
-EMAIL_PORT = int(os.environ.get('EMAIL_PORT', '587'))
-EMAIL_USE_TLS = os.environ.get('EMAIL_USE_TLS', 'True') == 'True'
-EMAIL_HOST_USER = os.environ.get('EMAIL_HOST_USER', 'SportCareIdet@9c910bee8c73c5a2.maileroo.org')
-EMAIL_HOST_PASSWORD = os.environ.get('EMAIL_HOST_PASSWORD', '7b2cffc48077198a94710309881394bd75a61a383f7cba063507ae274c194cf0')
-DEFAULT_FROM_EMAIL = os.environ.get('DEFAULT_FROM_EMAIL', 'SportCare IDET <SportCareIdet@9c910bee8c73c5a2.maileroo.org>')
+EMAIL_HOST = 'smtp.maileroo.com'
+EMAIL_PORT = 587
+EMAIL_USE_TLS = True
+EMAIL_HOST_USER = 'SportCareIdet@9c910bee8c73c5a2.maileroo.org'
+EMAIL_HOST_PASSWORD = '7b2cffc48077198a94710309881394bd75a61a383f7cba063507ae274c194cf0'  
+DEFAULT_FROM_EMAIL = 'SportCare IDET <SportCareIdet@9c910bee8c73c5a2.maileroo.org>'
 
 # URLs del Frontend para los enlaces de recuperación
-FRONTEND_URL = os.environ.get('FRONTEND_URL', 'http://localhost:5173')
+FRONTEND_URL = 'http://localhost:5173'  # Sin la ruta específica
 PASSWORD_RESET_TIMEOUT = 3600  # 1 hora en segundos
 
 # Agregar configuración de logging para debug
@@ -358,5 +352,7 @@ LOGGING = {
         },
     },
 }
+# settings.py
+# ... al final del archivo
 
-MAILEROO_API_KEY = os.environ.get('MAILEROO_API_KEY', '7b2cffc48077198a94710309881394bd75a61a383f7cba063507ae274c194cf0')
+MAILEROO_API_KEY = '7b2cffc48077198a94710309881394bd75a61a383f7cba063507ae274c194cf0'
