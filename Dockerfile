@@ -19,8 +19,5 @@ COPY . .
 ENV PYTHONPATH=/app
 ENV DJANGO_SETTINGS_MODULE=SportCareIdet.settings_production
 
-# Puerto expuesto
-EXPOSE $PORT
-
-# Comando para Render
-CMD ["sh", "-c", "python manage.py migrate && python manage.py collectstatic --noinput && gunicorn --bind 0.0.0.0:${PORT:-8000} --workers 2 --timeout 120 SportCareIdet.wsgi:application"]
+# Comando para Render (SIMPLE y FUNCIONA)
+CMD python manage.py migrate && python manage.py collectstatic --noinput && python create_superuser.py && gunicorn SportCareIdet.wsgi:application --bind 0.0.0.0:$PORT
